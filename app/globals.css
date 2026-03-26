@@ -1,0 +1,21 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --green:  #16a34a;
+    --yellow: #ca8a04;
+    --red:    #dc2626;
+  }
+}
+
+@layer components {
+  .stoplight-green  { @apply bg-green-100  text-green-800  border border-green-200; }
+  .stoplight-yellow { @apply bg-yellow-100 text-yellow-800 border border-yellow-200; }
+  .stoplight-red    { @apply bg-red-100    text-red-800    border border-red-200; }
+  .stoplight-unknown { @apply bg-gray-100  text-gray-500   border border-gray-200; }
+
+  .card { @apply bg-white rounded-xl shadow-sm border border-gray-100 p-5; }
+  .section-header { @apply text-xs font-semibold uppercase tracking-widest text-gray-400 mb-3 mt-6; }
+}

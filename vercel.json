@@ -1,0 +1,16 @@
+{
+  "crons": [
+    {
+      "path": "/api/sync/appfolio",
+      "schedule": "0 6 * * *"
+    },
+    {
+      "path": "/api/sync/propertymeld",
+      "schedule": "0 6 * * *"
+    },
+    {
+      "path": "/api/sync/quickbooks",
+      "schedule": "0 6 * * *"
+    }
+  ]
+}

@@ -4,6 +4,7 @@ import { redirect } from 'next/navigation'
 import { SECTION_CONFIG } from '@/types'
 import type { MetricSection, UserRole } from '@/types'
 import SectionGroup from '@/components/dashboard/SectionGroup'
+import HealthSummary from '@/components/dashboard/HealthSummary'
 
 export default async function DashboardPage() {
   const supabase = await createClient()
@@ -23,6 +24,8 @@ export default async function DashboardPage() {
         <h1 className="text-2xl font-bold text-gray-900">Dashboard</h1>
         <p className="text-sm text-gray-500 mt-1">KPI overview across all operations</p>
       </div>
+
+      <HealthSummary cards={cards} />
 
       {visibleSections.map(([section, cfg]) => (
         <SectionGroup

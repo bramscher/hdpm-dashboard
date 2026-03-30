@@ -3,7 +3,7 @@ import { getUserRole } from '@/lib/kpi'
 import { redirect } from 'next/navigation'
 import { SECTION_CONFIG } from '@/types'
 import type { MetricSection, UserRole } from '@/types'
-import Sidebar from '@/components/dashboard/Sidebar'
+import DashboardShell from '@/components/dashboard/DashboardShell'
 
 export default async function DashboardLayout({ children }: { children: React.ReactNode }) {
   const supabase = await createClient()
@@ -16,15 +16,12 @@ export default async function DashboardLayout({ children }: { children: React.Re
     .map(([key, cfg]) => ({ key, label: cfg.label }))
 
   return (
-    <div className="flex min-h-screen">
-      <Sidebar
-        sections={visibleSections}
-        userEmail={user.email ?? ''}
-        role={role}
-      />
-      <main className="flex-1 ml-56 p-8 max-w-7xl">
-        {children}
-      </main>
-    </div>
+    <DashboardShell
+      sections={visibleSections}
+      userEmail={user.email ?? ''}
+      role={role}
+    >
+      {children}
+    </DashboardShell>
   )
 }

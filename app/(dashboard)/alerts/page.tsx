@@ -28,8 +28,8 @@ export default async function AlertsPage() {
   return (
     <div className="space-y-8">
       <div>
-        <h1 className="text-2xl font-bold text-gray-900">Alert Rules</h1>
-        <p className="text-sm text-gray-500 mt-1">
+        <h1 className="text-3xl font-extrabold text-ink-primary tracking-tight">Alert Rules</h1>
+        <p className="text-sm text-ink-muted mt-1">
           Get notified when KPIs cross critical thresholds
         </p>
       </div>

@@ -57,23 +57,22 @@ export default function MetricEntryForm({ metricKeys }: { metricKeys: string[] }
   const today = new Date().toISOString().slice(0, 10)
 
   return (
-    <form onSubmit={handleSubmit} className="card space-y-4">
-      <h2 className="text-lg font-semibold text-gray-900">Add Metric</h2>
+    <form onSubmit={handleSubmit} className="card space-y-5">
+      <h2 className="text-lg font-bold text-ink-primary">Add Metric</h2>
 
       {error && (
-        <div className="rounded-md bg-red-50 border border-red-200 px-3 py-2 text-sm text-red-700">
+        <div className="rounded-xl bg-[rgba(248,113,113,0.08)] border border-[rgba(248,113,113,0.2)] px-4 py-2.5 text-sm text-status-red">
           {error}
         </div>
       )}
       {success && (
-        <div className="rounded-md bg-green-50 border border-green-200 px-3 py-2 text-sm text-green-700">
+        <div className="rounded-xl bg-[rgba(52,211,153,0.08)] border border-[rgba(52,211,153,0.2)] px-4 py-2.5 text-sm text-status-green">
           Metric saved successfully
         </div>
       )}
 
-      {/* Metric key with datalist autocomplete */}
       <div>
-        <label htmlFor="metric_key" className="block text-sm font-medium text-gray-700">
+        <label htmlFor="metric_key" className="block text-xs font-medium text-ink-secondary mb-1.5">
           Metric Key
         </label>
         <input
@@ -81,7 +80,7 @@ export default function MetricEntryForm({ metricKeys }: { metricKeys: string[] }
           name="metric_key"
           list="metric-keys"
           required
-          className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 text-sm shadow-sm focus:border-hdpm-green focus:ring-hdpm-green"
+          className="block w-full px-3 py-2.5 text-sm"
           placeholder="e.g. owner_nps_score"
         />
         <datalist id="metric-keys">
@@ -89,28 +88,21 @@ export default function MetricEntryForm({ metricKeys }: { metricKeys: string[] }
         </datalist>
       </div>
 
-      {/* Section */}
       <div>
-        <label htmlFor="section" className="block text-sm font-medium text-gray-700">
+        <label htmlFor="section" className="block text-xs font-medium text-ink-secondary mb-1.5">
           Section
         </label>
-        <select
-          id="section"
-          name="section"
-          required
-          className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 text-sm shadow-sm focus:border-hdpm-green focus:ring-hdpm-green"
-        >
-          <option value="">Select section…</option>
+        <select id="section" name="section" required className="block w-full px-3 py-2.5 text-sm">
+          <option value="">Select section...</option>
           {SECTIONS.map(s => (
             <option key={s.value} value={s.value}>{s.label}</option>
           ))}
         </select>
       </div>
 
-      {/* Value + Unit */}
       <div className="grid grid-cols-2 gap-4">
         <div>
-          <label htmlFor="value" className="block text-sm font-medium text-gray-700">
+          <label htmlFor="value" className="block text-xs font-medium text-ink-secondary mb-1.5">
             Value
           </label>
           <input
@@ -119,30 +111,24 @@ export default function MetricEntryForm({ metricKeys }: { metricKeys: string[] }
             type="number"
             step="any"
             required
-            className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 text-sm shadow-sm focus:border-hdpm-green focus:ring-hdpm-green"
+            className="block w-full px-3 py-2.5 text-sm"
             placeholder="95.2"
           />
         </div>
         <div>
-          <label htmlFor="unit" className="block text-sm font-medium text-gray-700">
+          <label htmlFor="unit" className="block text-xs font-medium text-ink-secondary mb-1.5">
             Unit
           </label>
-          <select
-            id="unit"
-            name="unit"
-            required
-            className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 text-sm shadow-sm focus:border-hdpm-green focus:ring-hdpm-green"
-          >
-            <option value="">Select…</option>
+          <select id="unit" name="unit" required className="block w-full px-3 py-2.5 text-sm">
+            <option value="">Select...</option>
             {UNITS.map(u => <option key={u} value={u}>{u}</option>)}
           </select>
         </div>
       </div>
 
-      {/* Period */}
       <div className="grid grid-cols-2 gap-4">
         <div>
-          <label htmlFor="period_start" className="block text-sm font-medium text-gray-700">
+          <label htmlFor="period_start" className="block text-xs font-medium text-ink-secondary mb-1.5">
             Period Start
           </label>
           <input
@@ -151,11 +137,11 @@ export default function MetricEntryForm({ metricKeys }: { metricKeys: string[] }
             type="date"
             required
             defaultValue={today}
-            className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 text-sm shadow-sm focus:border-hdpm-green focus:ring-hdpm-green"
+            className="block w-full px-3 py-2.5 text-sm"
           />
         </div>
         <div>
-          <label htmlFor="period_end" className="block text-sm font-medium text-gray-700">
+          <label htmlFor="period_end" className="block text-xs font-medium text-ink-secondary mb-1.5">
             Period End
           </label>
           <input
@@ -164,31 +150,30 @@ export default function MetricEntryForm({ metricKeys }: { metricKeys: string[] }
             type="date"
             required
             defaultValue={today}
-            className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 text-sm shadow-sm focus:border-hdpm-green focus:ring-hdpm-green"
+            className="block w-full px-3 py-2.5 text-sm"
           />
         </div>
       </div>
 
-      {/* Notes */}
       <div>
-        <label htmlFor="notes" className="block text-sm font-medium text-gray-700">
+        <label htmlFor="notes" className="block text-xs font-medium text-ink-secondary mb-1.5">
           Notes (optional)
         </label>
         <textarea
           id="notes"
           name="notes"
           rows={2}
-          className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 text-sm shadow-sm focus:border-hdpm-green focus:ring-hdpm-green"
-          placeholder="Any context about this metric…"
+          className="block w-full px-3 py-2.5 text-sm"
+          placeholder="Any context about this metric..."
         />
       </div>
 
       <button
         type="submit"
         disabled={isPending}
-        className="w-full rounded-md bg-hdpm-dark px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-hdpm-green transition-colors disabled:opacity-50"
+        className="btn-neon w-full disabled:opacity-50"
       >
-        {isPending ? 'Saving…' : 'Save Metric'}
+        {isPending ? 'Saving...' : 'Save Metric'}
       </button>
     </form>
   )

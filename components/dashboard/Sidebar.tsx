@@ -30,37 +30,49 @@ export default function Sidebar({ sections, userEmail, role, isOpen, onClose }: 
 
   return (
     <>
-      {/* Mobile overlay */}
       {isOpen && (
         <div
-          className="fixed inset-0 bg-black/30 z-40 lg:hidden"
+          className="fixed inset-0 bg-black/70 backdrop-blur-md z-40 lg:hidden"
           onClick={onClose}
         />
       )}
 
       <aside className={clsx(
-        'fixed inset-y-0 left-0 w-60 bg-white border-r border-gray-100 flex flex-col z-50 transition-transform duration-200',
+        'fixed inset-y-0 left-0 w-[260px] flex flex-col z-50 transition-transform duration-300 ease-[cubic-bezier(0.16,1,0.3,1)]',
+        'bg-[rgba(16,15,36,0.85)] backdrop-blur-2xl border-r border-[rgba(140,120,255,0.08)]',
         'lg:translate-x-0',
         isOpen ? 'translate-x-0' : '-translate-x-full'
       )}>
         {/* Brand */}
-        <div className="px-5 py-5 border-b border-gray-100">
-          <div className="flex items-center gap-2.5">
-            <div className="w-8 h-8 rounded-lg bg-hdpm-dark text-white flex items-center justify-center text-sm font-bold">
-              H
+        <div className="px-6 py-6">
+          <div className="flex items-center gap-3.5">
+            <div className="relative">
+              <div className="w-11 h-11 rounded-2xl bg-gradient-to-br from-neon-green via-neon-cyan to-neon-purple flex items-center justify-center shadow-neon-green">
+                <span className="text-surface-deep font-extrabold text-lg">H</span>
+              </div>
+              {/* Online indicator */}
+              <div className="absolute -bottom-0.5 -right-0.5 w-3.5 h-3.5 rounded-full border-2 border-surface-deep status-dot-green" />
             </div>
             <div>
-              <span className="text-sm font-semibold text-gray-900 block leading-tight">HDPM</span>
-              <span className="text-[10px] text-gray-400 leading-tight">CEO Dashboard</span>
+              <span className="text-sm font-bold text-ink-primary block leading-tight tracking-widest">
+                HDPM
+              </span>
+              <span className="text-[10px] text-neon-cyan/70 leading-tight font-mono tracking-wider">
+                EXECUTIVE
+              </span>
             </div>
           </div>
         </div>
 
+        {/* Gradient divider */}
+        <div className="mx-5 h-px bg-gradient-to-r from-neon-purple/20 via-neon-cyan/20 to-transparent" />
+
         {/* Page nav */}
-        <nav className="px-3 pt-4 pb-2 space-y-0.5">
-          <p className="px-3 mb-1.5 text-[10px] font-semibold uppercase tracking-widest text-gray-300">Pages</p>
+        <nav className="px-4 pt-5 pb-3 space-y-1">
+          <p className="px-3 mb-2.5 text-[9px] font-bold uppercase tracking-[0.2em] text-ink-muted font-mono">
+            Navigate
+          </p>
           {NAV_LINKS.map(link => {
-            // Only show alerts/metrics for ceo/manager
             if ((link.href === '/metrics' || link.href === '/alerts') && role === 'viewer') return null
             const active = pathname === link.href
             return (
@@ -69,43 +81,70 @@ export default function Sidebar({ sections, userEmail, role, isOpen, onClose }: 
                 href={link.href}
                 onClick={onClose}
                 className={clsx(
-                  'flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm transition',
+                  'group flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm transition-all duration-250',
                   active
-                    ? 'bg-hdpm-dark/10 text-hdpm-dark font-medium'
-                    : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
+                    ? 'bg-gradient-to-r from-neon-green/15 to-neon-cyan/10 text-neon-lime font-semibold shadow-[inset_0_0_0_1px_rgba(107,171,57,0.2)]'
+                    : 'text-ink-secondary hover:bg-[rgba(167,139,250,0.06)] hover:text-ink-primary'
                 )}
               >
-                <link.icon className="w-4 h-4 shrink-0" />
+                <link.icon className={clsx(
+                  'w-[18px] h-[18px] shrink-0 transition-all duration-250',
+                  active && 'drop-shadow-[0_0_6px_rgba(163,245,76,0.5)]'
+                )} />
                 {link.label}
+                {active && (
+                  <div className="ml-auto w-1.5 h-1.5 rounded-full bg-neon-lime shadow-[0_0_6px_rgba(163,245,76,0.6)]" />
+                )}
               </a>
             )
           })}
         </nav>
 
         {/* Section anchors */}
-        <nav className="flex-1 px-3 pb-4 space-y-0.5 overflow-y-auto">
-          <p className="px-3 mb-1.5 text-[10px] font-semibold uppercase tracking-widest text-gray-300">Sections</p>
-          {sections.map(s => (
+        <nav className="flex-1 px-4 pb-4 space-y-0.5 overflow-y-auto">
+          <p className="px-3 mb-2.5 text-[9px] font-bold uppercase tracking-[0.2em] text-ink-muted font-mono">
+            Sections
+          </p>
+          {sections.map((s, i) => (
             <a
               key={s.key}
               href={`/dashboard#${s.key}`}
               onClick={onClose}
-              className="block px-3 py-1.5 rounded-lg text-sm text-gray-500 hover:bg-gray-50 hover:text-gray-900 transition"
+              className="group flex items-center gap-3 px-3 py-2 rounded-xl text-sm text-ink-muted hover:text-ink-secondary hover:bg-[rgba(140,120,255,0.04)] transition-all duration-200"
             >
+              <span
+                className="w-1.5 h-1.5 rounded-full shrink-0 transition-all duration-300 group-hover:scale-125"
+                style={{
+                  background: `hsl(${160 + i * 30}, 70%, 60%)`,
+                  boxShadow: `0 0 4px hsla(${160 + i * 30}, 70%, 60%, 0.4)`,
+                }}
+              />
               {s.label}
             </a>
           ))}
         </nav>
 
+        {/* Gradient divider */}
+        <div className="mx-5 h-px bg-gradient-to-r from-transparent via-neon-purple/15 to-neon-cyan/15" />
+
         {/* User footer */}
-        <div className="px-4 py-4 border-t border-gray-100">
-          <p className="text-xs text-gray-500 truncate" title={userEmail}>{userEmail}</p>
-          <p className="text-[10px] text-gray-400 uppercase tracking-wide mt-0.5">{role}</p>
+        <div className="px-5 py-5">
+          <div className="flex items-center gap-3">
+            <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-neon-purple/20 to-neon-cyan/20 border border-[rgba(140,120,255,0.15)] flex items-center justify-center backdrop-blur-sm">
+              <span className="text-xs font-bold text-neon-purple">
+                {userEmail.charAt(0).toUpperCase()}
+              </span>
+            </div>
+            <div className="min-w-0 flex-1">
+              <p className="text-xs text-ink-secondary truncate" title={userEmail}>{userEmail}</p>
+              <p className="text-[10px] text-neon-green uppercase tracking-[0.15em] font-bold font-mono mt-0.5">{role}</p>
+            </div>
+          </div>
           <button
             onClick={handleSignOut}
-            className="mt-3 text-xs text-gray-400 hover:text-red-500 transition"
+            className="mt-3 w-full text-left text-[11px] text-ink-muted hover:text-neon-magenta transition-colors duration-200 font-mono"
           >
-            Sign out
+            SIGN OUT
           </button>
         </div>
       </aside>
@@ -113,7 +152,7 @@ export default function Sidebar({ sections, userEmail, role, isOpen, onClose }: 
   )
 }
 
-/* ─── Inline icons (avoid adding a dependency) ─────────────────────────── */
+/* ─── Icons ────────────────────────────────────────────────────────── */
 
 function LayoutIcon({ className }: { className?: string }) {
   return (

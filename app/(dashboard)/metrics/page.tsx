@@ -31,8 +31,8 @@ export default async function MetricsPage() {
   return (
     <div className="space-y-8">
       <div>
-        <h1 className="text-2xl font-bold text-gray-900">Manual Metric Entry</h1>
-        <p className="text-sm text-gray-500 mt-1">
+        <h1 className="text-3xl font-extrabold text-ink-primary tracking-tight">Manual Entry</h1>
+        <p className="text-sm text-ink-muted mt-1">
           Enter KPIs for sections without API integrations (growth, retention, people)
         </p>
       </div>

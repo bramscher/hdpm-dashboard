@@ -72,34 +72,28 @@ export default function AlertsManager({ initialRules, metricKeys, isCeo }: Alert
   return (
     <div className="space-y-6">
       {error && (
-        <div className="rounded-md bg-red-50 border border-red-200 px-3 py-2 text-sm text-red-700">
+        <div className="rounded-xl bg-[rgba(248,113,113,0.08)] border border-[rgba(248,113,113,0.2)] px-4 py-2.5 text-sm text-status-red">
           {error}
         </div>
       )}
 
-      {/* Create form */}
       {isCeo && (
         <div>
           {!showCreate ? (
             <button
               onClick={() => setShowCreate(true)}
-              className="rounded-md bg-hdpm-dark px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-hdpm-green transition-colors"
+              className="btn-neon"
             >
               + New Alert Rule
             </button>
           ) : (
             <form onSubmit={handleCreate} className="card space-y-4 max-w-lg">
-              <h3 className="text-sm font-semibold text-gray-900">Create Alert Rule</h3>
+              <h3 className="text-sm font-semibold text-ink-primary">Create Alert Rule</h3>
 
               <div>
-                <label htmlFor="alert_metric" className="block text-sm font-medium text-gray-700">Metric</label>
-                <select
-                  id="alert_metric"
-                  name="metric_key"
-                  required
-                  className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 text-sm"
-                >
-                  <option value="">Select metric…</option>
+                <label htmlFor="alert_metric" className="block text-xs font-medium text-ink-secondary mb-1.5">Metric</label>
+                <select id="alert_metric" name="metric_key" required className="block w-full px-3 py-2.5 text-sm">
+                  <option value="">Select metric...</option>
                   {metricKeys.map(k => (
                     <option key={k} value={k}>
                       {k.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase())}
@@ -110,43 +104,38 @@ export default function AlertsManager({ initialRules, metricKeys, isCeo }: Alert
 
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label htmlFor="alert_condition" className="block text-sm font-medium text-gray-700">Condition</label>
-                  <select
-                    id="alert_condition"
-                    name="condition"
-                    required
-                    className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 text-sm"
-                  >
+                  <label htmlFor="alert_condition" className="block text-xs font-medium text-ink-secondary mb-1.5">Condition</label>
+                  <select id="alert_condition" name="condition" required className="block w-full px-3 py-2.5 text-sm">
                     <option value="below">Falls below</option>
                     <option value="above">Goes above</option>
                   </select>
                 </div>
                 <div>
-                  <label htmlFor="alert_threshold" className="block text-sm font-medium text-gray-700">Threshold</label>
+                  <label htmlFor="alert_threshold" className="block text-xs font-medium text-ink-secondary mb-1.5">Threshold</label>
                   <input
                     id="alert_threshold"
                     name="threshold"
                     type="number"
                     step="any"
                     required
-                    className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 text-sm"
+                    className="block w-full px-3 py-2.5 text-sm"
                     placeholder="90"
                   />
                 </div>
               </div>
 
-              <div className="flex gap-2">
+              <div className="flex gap-3">
                 <button
                   type="submit"
                   disabled={isPending}
-                  className="rounded-md bg-hdpm-dark px-4 py-2 text-sm font-medium text-white hover:bg-hdpm-green transition-colors disabled:opacity-50"
+                  className="btn-neon disabled:opacity-50"
                 >
                   Create
                 </button>
                 <button
                   type="button"
                   onClick={() => setShowCreate(false)}
-                  className="rounded-md border border-gray-300 px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
+                  className="rounded-xl border border-[rgba(107,171,57,0.15)] px-5 py-2 text-sm text-ink-secondary hover:bg-surface-elevated transition-all duration-200"
                 >
                   Cancel
                 </button>
@@ -156,59 +145,58 @@ export default function AlertsManager({ initialRules, metricKeys, isCeo }: Alert
         </div>
       )}
 
-      {/* Rules table */}
       {rules.length === 0 ? (
         <div className="card">
-          <p className="text-sm text-gray-500">No alert rules configured yet.</p>
+          <p className="text-sm text-ink-muted">No alert rules configured yet.</p>
         </div>
       ) : (
-        <div className="card overflow-x-auto -mx-0">
+        <div className="card overflow-x-auto">
           <table className="min-w-full text-sm">
             <thead>
-              <tr className="border-b border-gray-200">
-                <th className="text-left px-4 py-2 font-medium text-gray-500">Metric</th>
-                <th className="text-left px-4 py-2 font-medium text-gray-500">Condition</th>
-                <th className="text-right px-4 py-2 font-medium text-gray-500">Threshold</th>
-                <th className="text-center px-4 py-2 font-medium text-gray-500">Status</th>
+              <tr className="border-b border-[rgba(107,171,57,0.1)]">
+                <th className="text-left px-4 py-2.5 text-[10px] font-semibold uppercase tracking-wider text-ink-muted">Metric</th>
+                <th className="text-left px-4 py-2.5 text-[10px] font-semibold uppercase tracking-wider text-ink-muted">Condition</th>
+                <th className="text-right px-4 py-2.5 text-[10px] font-semibold uppercase tracking-wider text-ink-muted">Threshold</th>
+                <th className="text-center px-4 py-2.5 text-[10px] font-semibold uppercase tracking-wider text-ink-muted">Status</th>
                 {isCeo && (
-                  <th className="text-right px-4 py-2 font-medium text-gray-500">Actions</th>
+                  <th className="text-right px-4 py-2.5 text-[10px] font-semibold uppercase tracking-wider text-ink-muted">Actions</th>
                 )}
               </tr>
             </thead>
-            <tbody className="divide-y divide-gray-100">
+            <tbody>
               {rules.map(rule => (
-                <tr key={rule.id} className="hover:bg-gray-50 transition-colors">
-                  <td className="px-4 py-3 text-gray-900 font-medium">
+                <tr key={rule.id} className="border-b border-[rgba(107,171,57,0.05)]">
+                  <td className="px-4 py-3 text-ink-primary font-medium">
                     {rule.metric_key.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase())}
                   </td>
-                  <td className="px-4 py-3 text-gray-600">
+                  <td className="px-4 py-3 text-ink-secondary">
                     {rule.condition === 'below' ? 'Falls below' : 'Goes above'}
                   </td>
-                  <td className="px-4 py-3 text-right text-gray-900 tabular-nums">
+                  <td className="px-4 py-3 text-right text-ink-primary tabular-nums font-medium">
                     {rule.threshold}
                   </td>
                   <td className="px-4 py-3 text-center">
                     <span className={clsx(
-                      'inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-semibold uppercase tracking-wide',
+                      'inline-flex items-center px-2.5 py-0.5 rounded-lg text-[9px] font-semibold uppercase tracking-wider',
                       rule.is_active
-                        ? 'bg-green-100 text-green-800'
-                        : 'bg-gray-100 text-gray-500'
+                        ? 'bg-[rgba(52,211,153,0.1)] text-status-green border border-[rgba(52,211,153,0.2)]'
+                        : 'bg-[rgba(107,114,128,0.1)] text-ink-muted border border-[rgba(107,114,128,0.15)]'
                     )}>
                       {rule.is_active ? 'Active' : 'Paused'}
                     </span>
                   </td>
                   {isCeo && (
                     <td className="px-4 py-3 text-right">
-                      <div className="flex items-center justify-end gap-2">
+                      <div className="flex items-center justify-end gap-3">
                         <button
                           onClick={() => handleToggle(rule)}
-                          className="text-xs text-gray-500 hover:text-gray-900 transition"
+                          className="text-[11px] text-ink-muted hover:text-ink-primary transition-colors"
                         >
                           {rule.is_active ? 'Pause' : 'Enable'}
                         </button>
                         <button
                           onClick={() => handleDelete(rule.id)}
-                          className="text-xs text-red-400 hover:text-red-600 transition"
+                          className="text-[11px] text-ink-muted hover:text-status-red transition-colors"
                         >
                           Delete
                         </button>

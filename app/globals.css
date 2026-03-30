@@ -6,34 +6,31 @@
 
 @layer base {
   :root {
-    --bg-deep: #0b0a1a;
-    --bg-base: #100f24;
-    --bg-card: rgba(22, 20, 50, 0.6);
-    --bg-card-solid: #161432;
-    --bg-elevated: rgba(30, 28, 60, 0.7);
-    --border-glass: rgba(140, 120, 255, 0.12);
-    --border-glow: rgba(140, 120, 255, 0.25);
-    --text-primary: #eeedf5;
-    --text-secondary: #9d99b8;
-    --text-muted: #5f5b7a;
+    --bg-deep: #08071a;
+    --bg-base: #0d0c22;
+    --bg-card: rgba(18, 16, 42, 0.35);
+    --bg-card-hover: rgba(24, 22, 54, 0.45);
+    --bg-elevated: rgba(30, 28, 60, 0.5);
+    --border-glass: rgba(255, 255, 255, 0.06);
+    --border-glass-hover: rgba(255, 255, 255, 0.12);
+    --text-primary: #f0eff8;
+    --text-secondary: #a09cb8;
+    --text-muted: #5c5878;
     --neon-green: #6bab39;
     --neon-lime: #a3f54c;
     --neon-cyan: #22d3ee;
     --neon-purple: #a78bfa;
     --neon-magenta: #f472b6;
-    --neon-orange: #fb923c;
     --green: #34d399;
-    --green-glow: rgba(52, 211, 153, 0.4);
     --yellow: #fbbf24;
-    --yellow-glow: rgba(251, 191, 36, 0.4);
     --red: #f87171;
-    --red-glow: rgba(248, 113, 113, 0.4);
     --unknown: #6b7280;
+    --glass-blur: 20px;
+    --glass-saturation: 1.8;
+    --card-radius: 24px;
   }
 
-  * {
-    border-color: var(--border-glass);
-  }
+  * { border-color: var(--border-glass); }
 
   body {
     background: var(--bg-deep);
@@ -43,135 +40,175 @@
     overflow-x: hidden;
   }
 
-  /* ─── Animated mesh gradient background ─────────────────────────── */
+  /* ─── Ambient light orbs (Jony Ive: subtle, purposeful color) ─── */
   body::before {
     content: '';
     position: fixed;
     inset: 0;
     background:
-      radial-gradient(ellipse 80% 60% at 10% 20%, rgba(107, 171, 57, 0.08) 0%, transparent 60%),
-      radial-gradient(ellipse 60% 80% at 85% 70%, rgba(167, 139, 250, 0.07) 0%, transparent 60%),
-      radial-gradient(ellipse 50% 50% at 50% 0%, rgba(34, 211, 238, 0.05) 0%, transparent 50%);
+      radial-gradient(ellipse 60% 50% at 10% 15%, rgba(107, 171, 57, 0.14) 0%, transparent 65%),
+      radial-gradient(ellipse 50% 60% at 85% 75%, rgba(167, 139, 250, 0.12) 0%, transparent 65%),
+      radial-gradient(ellipse 45% 40% at 50% 5%, rgba(34, 211, 238, 0.09) 0%, transparent 55%),
+      radial-gradient(ellipse 40% 45% at 95% 25%, rgba(244, 114, 182, 0.07) 0%, transparent 55%),
+      radial-gradient(ellipse 35% 35% at 40% 60%, rgba(251, 191, 36, 0.06) 0%, transparent 50%);
     pointer-events: none;
     z-index: 0;
+    animation: ambientDrift 25s ease-in-out infinite alternate;
   }
 
-  /* ─── Grain texture ─────────────────────────────────────────────── */
+  @keyframes ambientDrift {
+    0%   { transform: scale(1) translate(0, 0); opacity: 1; }
+    33%  { transform: scale(1.05) translate(1%, -1%); opacity: 0.85; }
+    66%  { transform: scale(0.98) translate(-1%, 1%); opacity: 0.95; }
+    100% { transform: scale(1.02) translate(0.5%, -0.5%); opacity: 1; }
+  }
+
+  /* ─── Ultra-fine grain ─────────────────────────────────────────── */
   body::after {
     content: '';
     position: fixed;
     inset: 0;
-    opacity: 0.03;
-    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    opacity: 0.018;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='5' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
     pointer-events: none;
     z-index: 9999;
   }
 
-  #__next, body > div {
-    position: relative;
-    z-index: 1;
-  }
+  #__next, body > div { position: relative; z-index: 1; }
 }
 
 @layer components {
-  /* ─── Glassmorphic Cards ──────────────────────────────────────── */
+  /* ─── Liquid Glass Card ───────────────────────────────────────── */
   .card {
     background: var(--bg-card);
     border: 1px solid var(--border-glass);
-    border-radius: 20px;
+    border-radius: var(--card-radius);
     padding: 1.5rem;
-    backdrop-filter: blur(24px) saturate(1.5);
-    -webkit-backdrop-filter: blur(24px) saturate(1.5);
+    backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturation));
+    -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturation));
     position: relative;
     overflow: hidden;
-    transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: all 0.5s cubic-bezier(0.22, 1, 0.36, 1);
   }
 
+  /* ─── Iridescent border shimmer ───────────────────────────────── */
   .card::before {
     content: '';
     position: absolute;
     inset: 0;
-    border-radius: 20px;
+    border-radius: var(--card-radius);
     padding: 1px;
     background: linear-gradient(
       135deg,
-      rgba(167, 139, 250, 0.15) 0%,
-      transparent 40%,
-      transparent 60%,
-      rgba(107, 171, 57, 0.1) 100%
+      rgba(167, 139, 250, 0.2) 0%,
+      rgba(34, 211, 238, 0.1) 25%,
+      transparent 50%,
+      rgba(107, 171, 57, 0.1) 75%,
+      rgba(244, 114, 182, 0.15) 100%
     );
+    background-size: 200% 200%;
+    animation: shimmer 8s ease-in-out infinite;
     -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
     -webkit-mask-composite: xor;
     mask-composite: exclude;
     pointer-events: none;
   }
 
+  /* ─── Inner light refraction (top-left highlight) ─────────────── */
+  .card::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 50%;
+    height: 50%;
+    border-radius: var(--card-radius) 0 0 0;
+    background: linear-gradient(
+      135deg,
+      rgba(255, 255, 255, 0.04) 0%,
+      transparent 60%
+    );
+    pointer-events: none;
+  }
+
   .card:hover {
-    border-color: var(--border-glow);
+    background: var(--bg-card-hover);
+    border-color: var(--border-glass-hover);
     box-shadow:
-      0 0 30px rgba(167, 139, 250, 0.06),
-      0 8px 32px rgba(0, 0, 0, 0.3),
-      inset 0 1px 0 rgba(255, 255, 255, 0.04);
-    transform: translateY(-2px);
+      0 0 40px rgba(167, 139, 250, 0.06),
+      0 12px 40px rgba(0, 0, 0, 0.35),
+      inset 0 1px 0 rgba(255, 255, 255, 0.06);
+    transform: translateY(-3px) scale(1.005);
+  }
+
+  @keyframes shimmer {
+    0%, 100% { background-position: 0% 0%; }
+    50%      { background-position: 100% 100%; }
   }
 
   /* ─── Section Headers ─────────────────────────────────────────── */
   .section-header {
     font-family: 'Outfit', system-ui, sans-serif;
-    font-size: 0.75rem;
+    font-size: 0.7rem;
     font-weight: 600;
-    letter-spacing: 0.15em;
+    letter-spacing: 0.18em;
     text-transform: uppercase;
     color: var(--text-muted);
     margin-bottom: 1rem;
     margin-top: 2.5rem;
     padding-bottom: 0.75rem;
-    border-bottom: 1px solid var(--border-glass);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.04);
   }
 
-  /* ─── Stoplight Status Badges ─────────────────────────────────── */
+  /* ─── Status badges — frosted pill ────────────────────────────── */
   .stoplight-green {
-    background: rgba(52, 211, 153, 0.12);
+    background: rgba(52, 211, 153, 0.1);
     color: var(--green);
-    border: 1px solid rgba(52, 211, 153, 0.25);
-    text-shadow: 0 0 8px rgba(52, 211, 153, 0.5);
+    border: 1px solid rgba(52, 211, 153, 0.2);
+    text-shadow: 0 0 12px rgba(52, 211, 153, 0.6);
+    backdrop-filter: blur(8px);
   }
 
   .stoplight-yellow {
-    background: rgba(251, 191, 36, 0.12);
+    background: rgba(251, 191, 36, 0.1);
     color: var(--yellow);
-    border: 1px solid rgba(251, 191, 36, 0.25);
-    text-shadow: 0 0 8px rgba(251, 191, 36, 0.5);
+    border: 1px solid rgba(251, 191, 36, 0.2);
+    text-shadow: 0 0 12px rgba(251, 191, 36, 0.6);
+    backdrop-filter: blur(8px);
   }
 
   .stoplight-red {
-    background: rgba(248, 113, 113, 0.12);
+    background: rgba(248, 113, 113, 0.1);
     color: var(--red);
-    border: 1px solid rgba(248, 113, 113, 0.25);
-    text-shadow: 0 0 8px rgba(248, 113, 113, 0.5);
+    border: 1px solid rgba(248, 113, 113, 0.2);
+    text-shadow: 0 0 12px rgba(248, 113, 113, 0.6);
+    backdrop-filter: blur(8px);
   }
 
   .stoplight-unknown {
-    background: rgba(107, 114, 128, 0.12);
+    background: rgba(107, 114, 128, 0.1);
     color: var(--unknown);
-    border: 1px solid rgba(107, 114, 128, 0.2);
+    border: 1px solid rgba(107, 114, 128, 0.15);
+    backdrop-filter: blur(8px);
   }
 
-  /* ─── Neon Status Dots ────────────────────────────────────────── */
+  /* ─── Neon Status Dots with breathing glow ────────────────────── */
   .status-dot-green {
     background: var(--green);
-    box-shadow: 0 0 4px var(--green), 0 0 12px var(--green-glow), 0 0 24px rgba(52, 211, 153, 0.15);
+    box-shadow: 0 0 4px var(--green), 0 0 16px rgba(52, 211, 153, 0.35);
+    animation: breathe-green 4s ease-in-out infinite;
   }
 
   .status-dot-yellow {
     background: var(--yellow);
-    box-shadow: 0 0 4px var(--yellow), 0 0 12px var(--yellow-glow), 0 0 24px rgba(251, 191, 36, 0.15);
+    box-shadow: 0 0 4px var(--yellow), 0 0 16px rgba(251, 191, 36, 0.35);
+    animation: breathe-yellow 4s ease-in-out infinite;
   }
 
   .status-dot-red {
     background: var(--red);
-    box-shadow: 0 0 4px var(--red), 0 0 12px var(--red-glow), 0 0 24px rgba(248, 113, 113, 0.15);
-    animation: neonPulse 2s ease-in-out infinite;
+    box-shadow: 0 0 4px var(--red), 0 0 16px rgba(248, 113, 113, 0.35);
+    animation: breathe-red 2.5s ease-in-out infinite;
   }
 
   .status-dot-unknown {
@@ -179,21 +216,29 @@
     box-shadow: 0 0 6px var(--unknown);
   }
 
-  @keyframes neonPulse {
-    0%, 100% { box-shadow: 0 0 4px var(--red), 0 0 12px var(--red-glow), 0 0 24px rgba(248, 113, 113, 0.15); }
-    50% { box-shadow: 0 0 8px var(--red), 0 0 24px var(--red-glow), 0 0 48px rgba(248, 113, 113, 0.25); }
+  @keyframes breathe-green {
+    0%, 100% { box-shadow: 0 0 4px var(--green), 0 0 16px rgba(52, 211, 153, 0.3); }
+    50%      { box-shadow: 0 0 6px var(--green), 0 0 28px rgba(52, 211, 153, 0.5); }
+  }
+  @keyframes breathe-yellow {
+    0%, 100% { box-shadow: 0 0 4px var(--yellow), 0 0 16px rgba(251, 191, 36, 0.3); }
+    50%      { box-shadow: 0 0 6px var(--yellow), 0 0 28px rgba(251, 191, 36, 0.5); }
+  }
+  @keyframes breathe-red {
+    0%, 100% { box-shadow: 0 0 4px var(--red), 0 0 16px rgba(248, 113, 113, 0.35); }
+    50%      { box-shadow: 0 0 8px var(--red), 0 0 36px rgba(248, 113, 113, 0.6); }
   }
 
-  /* ─── Card entrance animation ─────────────────────────────────── */
+  /* ─── Card entrance — liquid reveal ───────────────────────────── */
   .card-enter {
-    animation: cardReveal 0.6s cubic-bezier(0.16, 1, 0.3, 1) both;
+    animation: liquidReveal 0.7s cubic-bezier(0.22, 1, 0.36, 1) both;
   }
 
-  @keyframes cardReveal {
+  @keyframes liquidReveal {
     from {
       opacity: 0;
-      transform: translateY(24px) scale(0.97);
-      filter: blur(4px);
+      transform: translateY(20px) scale(0.96);
+      filter: blur(8px);
     }
     to {
       opacity: 1;
@@ -202,118 +247,103 @@
     }
   }
 
-  /* ─── Neon glow button ────────────────────────────────────────── */
+  /* ─── Neon button — liquid glass ──────────────────────────────── */
   .btn-neon {
-    background: linear-gradient(135deg, #6bab39, #22d3ee);
-    border: none;
-    border-radius: 14px;
+    background: linear-gradient(135deg, rgba(107, 171, 57, 0.8), rgba(34, 211, 238, 0.7));
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 16px;
     padding: 0.625rem 1.5rem;
     font-weight: 600;
     font-size: 0.875rem;
-    color: #0b0a1a;
+    color: white;
     position: relative;
-    transition: all 0.3s ease;
-    text-shadow: none;
+    transition: all 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+    backdrop-filter: blur(8px);
+    cursor: pointer;
   }
 
   .btn-neon::before {
     content: '';
     position: absolute;
-    inset: -1px;
-    border-radius: 15px;
-    background: linear-gradient(135deg, #6bab39, #22d3ee);
-    filter: blur(12px);
-    opacity: 0.4;
+    inset: -2px;
+    border-radius: 18px;
+    background: linear-gradient(135deg, rgba(107, 171, 57, 0.5), rgba(34, 211, 238, 0.4));
+    filter: blur(16px);
+    opacity: 0.3;
     z-index: -1;
-    transition: opacity 0.3s ease;
-  }
-
-  .btn-neon:hover::before {
-    opacity: 0.7;
+    transition: opacity 0.4s ease;
   }
 
   .btn-neon:hover {
-    transform: translateY(-1px);
-    box-shadow: 0 0 30px rgba(107, 171, 57, 0.3);
+    transform: translateY(-2px) scale(1.02);
+    box-shadow: 0 0 40px rgba(107, 171, 57, 0.25), inset 0 1px 0 rgba(255,255,255,0.15);
   }
 
-  /* ─── Custom scrollbar ────────────────────────────────────────── */
-  ::-webkit-scrollbar {
-    width: 5px;
-    height: 5px;
-  }
+  .btn-neon:hover::before { opacity: 0.6; }
 
-  ::-webkit-scrollbar-track {
-    background: transparent;
-  }
-
+  /* ─── Scrollbar — invisible until hover ───────────────────────── */
+  ::-webkit-scrollbar { width: 4px; height: 4px; }
+  ::-webkit-scrollbar-track { background: transparent; }
   ::-webkit-scrollbar-thumb {
-    background: rgba(167, 139, 250, 0.2);
+    background: rgba(255, 255, 255, 0.08);
     border-radius: 4px;
   }
+  ::-webkit-scrollbar-thumb:hover { background: rgba(255, 255, 255, 0.15); }
 
-  ::-webkit-scrollbar-thumb:hover {
-    background: rgba(167, 139, 250, 0.35);
-  }
-
-  /* ─── Form inputs (dark glass theme) ──────────────────────────── */
+  /* ─── Form inputs — frosted glass ─────────────────────────────── */
   input, select, textarea {
-    background: rgba(16, 15, 36, 0.8) !important;
-    border: 1px solid rgba(140, 120, 255, 0.15) !important;
+    background: rgba(12, 11, 28, 0.7) !important;
+    border: 1px solid rgba(255, 255, 255, 0.06) !important;
     color: var(--text-primary) !important;
-    border-radius: 12px !important;
-    backdrop-filter: blur(8px);
-    transition: all 0.2s ease !important;
+    border-radius: 14px !important;
+    backdrop-filter: blur(12px) !important;
+    transition: all 0.3s cubic-bezier(0.22, 1, 0.36, 1) !important;
   }
 
-  input::placeholder, textarea::placeholder {
-    color: var(--text-muted) !important;
-  }
+  input::placeholder, textarea::placeholder { color: var(--text-muted) !important; }
 
   input:focus, select:focus, textarea:focus {
-    border-color: rgba(107, 171, 57, 0.5) !important;
-    box-shadow: 0 0 0 3px rgba(107, 171, 57, 0.1), 0 0 20px rgba(107, 171, 57, 0.1) !important;
+    border-color: rgba(167, 139, 250, 0.3) !important;
+    box-shadow: 0 0 0 3px rgba(167, 139, 250, 0.08), 0 0 24px rgba(167, 139, 250, 0.06) !important;
     outline: none !important;
   }
 
   option {
-    background: var(--bg-card-solid);
+    background: #161432;
     color: var(--text-primary);
   }
 
-  /* ─── Table styling ───────────────────────────────────────────── */
+  /* ─── Table — liquid glass rows ───────────────────────────────── */
   table th {
     color: var(--text-muted) !important;
     font-family: 'Space Mono', monospace;
+    font-size: 9px !important;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
   }
-
-  table td {
-    color: var(--text-secondary) !important;
-  }
-
-  table tr:hover td {
-    color: var(--text-primary) !important;
-  }
-
+  table td { color: var(--text-secondary) !important; }
+  table tr:hover td { color: var(--text-primary) !important; }
   table tbody tr {
-    border-color: var(--border-glass) !important;
-    transition: all 0.2s ease;
+    border-color: rgba(255, 255, 255, 0.03) !important;
+    transition: all 0.3s cubic-bezier(0.22, 1, 0.36, 1);
   }
-
   table tbody tr:hover {
     background: rgba(167, 139, 250, 0.04) !important;
   }
 
-  /* ─── Ring progress indicator ─────────────────────────────────── */
-  .ring-progress {
-    transform: rotate(-90deg);
-  }
-
-  .ring-track {
-    stroke: rgba(140, 120, 255, 0.08);
-  }
-
+  /* ─── Ring progress charts ────────────────────────────────────── */
+  .ring-progress { transform: rotate(-90deg); }
+  .ring-track { stroke: rgba(255, 255, 255, 0.04); }
   .ring-fill {
-    transition: stroke-dashoffset 1s cubic-bezier(0.16, 1, 0.3, 1);
+    transition: stroke-dashoffset 1.2s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  /* ─── Reduced motion ──────────────────────────────────────────── */
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
   }
 }

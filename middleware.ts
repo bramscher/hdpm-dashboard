@@ -1,10 +1,8 @@
-import { type NextRequest, NextResponse } from 'next/server'
-// import { updateSession } from '@/lib/supabase/middleware'
+import { type NextRequest } from 'next/server'
+import { updateSession } from '@/lib/supabase/middleware'
 
-// TEMP: auth bypass for local UI preview
-export async function middleware(_request: NextRequest) {
-  return NextResponse.next()
-  // return await updateSession(request)
+export async function middleware(request: NextRequest) {
+  return await updateSession(request)
 }
 
 export const config = {

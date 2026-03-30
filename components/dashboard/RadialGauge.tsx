@@ -2,11 +2,11 @@
 
 import type { StoplightStatus } from '@/types'
 
-const STATUS_COLORS: Record<StoplightStatus, { stroke: string; glow: string; track: string }> = {
-  green:   { stroke: '#34d399', glow: 'rgba(52,211,153,0.4)',  track: 'rgba(52,211,153,0.08)' },
-  yellow:  { stroke: '#fbbf24', glow: 'rgba(251,191,36,0.4)',  track: 'rgba(251,191,36,0.08)' },
-  red:     { stroke: '#f87171', glow: 'rgba(248,113,113,0.4)', track: 'rgba(248,113,113,0.08)' },
-  unknown: { stroke: '#6b7280', glow: 'rgba(107,114,128,0.2)', track: 'rgba(107,114,128,0.08)' },
+const STATUS_COLORS: Record<StoplightStatus, { stroke: string; glow: string }> = {
+  green:   { stroke: '#34d399', glow: 'rgba(52,211,153,0.35)' },
+  yellow:  { stroke: '#fbbf24', glow: 'rgba(251,191,36,0.35)' },
+  red:     { stroke: '#f87171', glow: 'rgba(248,113,113,0.35)' },
+  unknown: { stroke: '#6b7280', glow: 'rgba(107,114,128,0.2)' },
 }
 
 interface RadialGaugeProps {
@@ -30,66 +30,63 @@ function formatDisplay(value: number, unit: string | null): string {
 }
 
 export default function RadialGauge({ value, max, label, unit, status, subtitle }: RadialGaugeProps) {
-  const { stroke, glow, track } = STATUS_COLORS[status]
+  const { stroke, glow } = STATUS_COLORS[status]
   const pct = Math.min((value / max) * 100, 100)
-  const radius = 52
+  const radius = 48
   const circumference = 2 * Math.PI * radius
   const offset = circumference - (pct / 100) * circumference
 
   return (
-    <div className="card card-enter flex flex-col items-center justify-center py-6 px-4 cursor-pointer">
-      <div className="relative w-[130px] h-[130px]">
-        <svg className="w-full h-full" viewBox="0 0 120 120" style={{ transform: 'rotate(-90deg)' }}>
-          {/* Track */}
-          <circle
-            cx="60" cy="60" r={radius}
-            fill="none"
-            strokeWidth="8"
-            stroke={track}
-            strokeLinecap="round"
-          />
-          {/* Gradient definition */}
+    <div className="card card-enter flex flex-col items-center justify-center py-7 px-4 cursor-pointer group">
+      <div className="relative w-[120px] h-[120px]">
+        <svg className="w-full h-full" viewBox="0 0 110 110" style={{ transform: 'rotate(-90deg)' }}>
           <defs>
-            <linearGradient id={`gauge-${label.replace(/\s/g, '')}`} x1="0%" y1="0%" x2="100%" y2="0%">
-              <stop offset="0%" stopColor={stroke} stopOpacity={0.6} />
-              <stop offset="100%" stopColor={stroke} />
+            <linearGradient id={`rg-${label.replace(/\W/g, '')}`} x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stopColor={stroke} stopOpacity={0.4} />
+              <stop offset="50%" stopColor={stroke} stopOpacity={1} />
+              <stop offset="100%" stopColor={stroke} stopOpacity={0.6} />
             </linearGradient>
           </defs>
+          {/* Track */}
+          <circle
+            cx="55" cy="55" r={radius}
+            fill="none"
+            strokeWidth="4"
+            stroke="rgba(255,255,255,0.03)"
+            strokeLinecap="round"
+          />
           {/* Fill */}
           <circle
-            cx="60" cy="60" r={radius}
+            cx="55" cy="55" r={radius}
             fill="none"
-            strokeWidth="8"
-            stroke={`url(#gauge-${label.replace(/\s/g, '')})`}
+            strokeWidth="4"
+            stroke={`url(#rg-${label.replace(/\W/g, '')})`}
             strokeLinecap="round"
             strokeDasharray={circumference}
             strokeDashoffset={offset}
-            style={{
-              filter: `drop-shadow(0 0 8px ${glow})`,
-              transition: 'stroke-dashoffset 1.2s cubic-bezier(0.16, 1, 0.3, 1)',
-            }}
+            className="transition-[stroke-dashoffset] duration-[1.5s] ease-[cubic-bezier(0.22,1,0.36,1)]"
+            style={{ filter: `drop-shadow(0 0 10px ${glow})` }}
           />
         </svg>
-        {/* Center text */}
         <div className="absolute inset-0 flex flex-col items-center justify-center">
           <span
-            className="text-2xl font-extrabold tabular-nums"
-            style={{ color: stroke, textShadow: `0 0 16px ${glow}` }}
+            className="text-[22px] font-bold tabular-nums tracking-tight transition-all duration-500 group-hover:scale-105"
+            style={{ color: stroke, textShadow: `0 0 20px ${glow}` }}
           >
             {formatDisplay(value, unit)}
           </span>
           {unit && (
-            <span className="text-[10px] font-mono text-ink-muted uppercase tracking-widest mt-0.5">
-              {unit === '$' ? 'USD' : unit === '%' ? 'PERCENT' : unit}
+            <span className="text-[8px] font-mono text-[#5c5878] uppercase tracking-[0.2em] mt-0.5">
+              {unit === '$' ? 'USD' : unit === '%' ? 'PCT' : unit}
             </span>
           )}
         </div>
       </div>
-      <p className="text-[11px] font-semibold text-ink-secondary uppercase tracking-[0.12em] mt-3 text-center">
+      <p className="text-[10px] font-semibold text-[#a09cb8] uppercase tracking-[0.14em] mt-4 text-center leading-tight">
         {label}
       </p>
       {subtitle && (
-        <p className="text-[10px] text-ink-muted font-mono mt-0.5">{subtitle}</p>
+        <p className="text-[9px] text-[#5c5878] font-mono mt-1 tracking-wider">{subtitle}</p>
       )}
     </div>
   )

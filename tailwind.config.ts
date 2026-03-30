@@ -16,6 +16,8 @@ const config: Config = {
           700: '#1d4ed8',
           900: '#1e3a8a',
         },
+        'hdpm-dark': '#2c4a29',
+        'hdpm-green': '#6bab39',
       },
     },
   },

@@ -32,7 +32,8 @@ export async function GET(request: NextRequest) {
   const metricKeys = [...new Set(rules.map((r: any) => r.metric_key))]
   const triggered: { rule_id: string; metric_key: string; condition: string; threshold: number; actual_value: number }[] = []
 
-  for (const key of metricKeys) {
+  for (const k of metricKeys) {
+    const key = k as string
     const { data: latest } = await supabase
       .from('hdpm_dash_metric_snapshots')
       .select('value')
